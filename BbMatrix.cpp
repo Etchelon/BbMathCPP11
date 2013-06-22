@@ -92,7 +92,6 @@ namespace BbMath
 	// *** PUBLIC CONSTRUCTORS ******************************************************************************** //
 	// ******************************************************************************************************** //
 
-#if __cplusplus >= 201103L
 	BbMatrix::BbMatrix(const initializer_list<initializer_list<double>>& lists)
 	{
 		// Read number of rows
@@ -132,7 +131,6 @@ namespace BbMath
 
 		hasSize = true;
 	}
-#endif
 
 	BbMatrix::BbMatrix(const vector<vector<double>>& vec)
 	{
@@ -246,12 +244,7 @@ namespace BbMath
 
 	ostream& operator<<(ostream& os, const BbMatrix& mat)
 	{
-#if __cplusplus >= 201103L
-		constexpr
-#else
-		static const
-#endif
-		int maxSize = 40;
+        constexpr size_t maxSize = 40;
 
 		if (!mat.has_size())
 		{
@@ -893,7 +886,7 @@ namespace BbMath
 		x = std::move(solve_Rx(Ab, x));
 
 		// Scale the solution back
-		for (int i = 1; i <= n; ++i)
+        for (size_t i = 1; i <= n; ++i)
 		{
 			x[i] /= coeff[i];
 		}
@@ -901,97 +894,97 @@ namespace BbMath
 		return x;
 	}
 
-	void solve_gauss_factorization(const BbMatrix& A, BbVector* bx)
-	{
-		BbVector& b = *bx;		// Alias for the input vector
+    void solve_gauss_factorization(const BbMatrix& A, BbVector* bx)
+    {
+        BbVector& b = *bx;		// Alias for the input vector
 
-		// Check requirements
-		if (!A.is_square())
-		{
-			throw length_error("Error in solve_gauss_factorization() - Matrix A isn't square!!\n");
-		}
+        // Check requirements
+        if (!A.is_square())
+        {
+            throw length_error("Error in solve_gauss_factorization() - Matrix A isn't square!!\n");
+        }
 
-		if (A.n_rows() != b.size())
-		{
-			throw length_error("Error in solve_gauss_factorization() - Sizes don't match!!\n");
-		}
+        if (A.n_rows() != b.size())
+        {
+            throw length_error("Error in solve_gauss_factorization() - Sizes don't match!!\n");
+        }
 
-		size_t n = b.size();
-		BbMatrix Ab(A);			// Work matrix that will be factorized
-		BbVector coeff(n);		// Vector of the scaling factor for the unknowns
+        size_t n = b.size();
+        BbMatrix Ab(A);			// Work matrix that will be factorized
+        BbVector coeff(n);		// Vector of the scaling factor for the unknowns
 
-		// Bring the system in its standard form
-		// Augment the matrix with the vector of constant terms
-		Ab.push_back_column(b);
+        // Bring the system in its standard form
+        // Augment the matrix with the vector of constant terms
+        Ab.push_back_column(b);
 
-		// Normalize rows to 1
-		for (size_t i = 1; i <= n; ++i)
-		{
-			Ab.normalize_row(i);
-		}
+        // Normalize rows to 1
+        for (size_t i = 1; i <= n; ++i)
+        {
+            Ab.normalize_row(i);
+        }
 
-		// Normalize columns and save the scaling factor
-		for (size_t j = 1; j <= n; ++j)
-		{
-			double denom = abs(*(std::max_element(Ab.col_begin(j), Ab.col_end(j), [](const double& a, const double& b){ return abs(a) < abs(b); })));
-			if (denom < 1.E-20)
-			{
-				throw runtime_error("Error in normalize_column(j) - Division by 0 in column normalization!!\n");
-			}
+        // Normalize columns and save the scaling factor
+        for (size_t j = 1; j <= n; ++j)
+        {
+            double denom = abs(*(std::max_element(Ab.col_begin(j), Ab.col_end(j), [](const double& a, const double& b){ return abs(a) < abs(b); })));
+            if (denom < 1.E-20)
+            {
+                throw runtime_error("Error in normalize_column(j) - Division by 0 in column normalization!!\n");
+            }
 
-			for_each(Ab.col_begin(j), Ab.col_end(j), [&denom](double& val){ val /= denom; });
-			coeff[j] = denom;
-		}
+            for_each(Ab.col_begin(j), Ab.col_end(j), [&denom](double& val){ val /= denom; });
+            coeff[j] = denom;
+        }
 
-		// Factorize the matrix
-		for (size_t k = 1; k <= n - 1; ++k)
-		{
-			Ab.seek_pivot_in_column(k);
+        // Factorize the matrix
+        for (size_t k = 1; k <= n - 1; ++k)
+        {
+            Ab.seek_pivot_in_column(k);
 
-			// Check for null pivot
-			if (abs(Ab[k][k]) < 1.E-20)
-			{
-				throw runtime_error("Error in normalize_column(j) - Singular matrix!!\n");
-			}
+            // Check for null pivot
+            if (abs(Ab[k][k]) < 1.E-20)
+            {
+                throw runtime_error("Error in normalize_column(j) - Singular matrix!!\n");
+            }
 
-			// Factorize the rows
-			for (size_t i = k + 1; i <= n; ++i)
-			{
-				if (Ab[i][k] == 0.)
-				{
-					continue;
-				}
+            // Factorize the rows
+            for (size_t i = k + 1; i <= n; ++i)
+            {
+                if (Ab[i][k] == 0.)
+                {
+                    continue;
+                }
 
-				Ab[i][k] /= Ab[k][k];
+                Ab[i][k] /= Ab[k][k];
 
-				for (size_t j = k + 1; j <= n; ++j)
-				{
-					Ab[i][j] -= Ab[i][k] * Ab[k][j];
-				}
-			}
-		}
+                for (size_t j = k + 1; j <= n; ++j)
+                {
+                    Ab[i][j] -= Ab[i][k] * Ab[k][j];
+                }
+            }
+        }
 
-		// Bring the matrix back to NxN and prepare the output vector
-		b = std::move(Ab.extract_column(n + 1));
+        // Bring the matrix back to NxN and prepare the output vector
+        b = std::move(Ab.extract_column(n + 1));
 
-		BbVector backup = Ab.get_diagonal();
+        BbVector backup = Ab.get_diagonal();
 
-		// Solve the left system
-		Ab.set_diagonal(1.);
-		b = std::move(solve_Lx(Ab, b));
+        // Solve the left system
+        Ab.set_diagonal(1.);
+        b = std::move(solve_Lx(Ab, b));
 
-		// Solve the right system
-		Ab.set_diagonal(backup);
-		b = std::move(solve_Rx(Ab, b));
+        // Solve the right system
+        Ab.set_diagonal(backup);
+        b = std::move(solve_Rx(Ab, b));
 
-		// Scale the solution back
-		for (int i = 1; i <= n; ++i)
-		{
-			b[i] /= coeff[i];
-		}
-	}
+        // Scale the solution back
+        for (size_t i = 1; i <= n; ++i)
+        {
+            b[i] /= coeff[i];
+        }
+    }
 
-	void BbMatrix::insert_row(size_type i, const BbVector& row)
+    void BbMatrix::insert_row(size_type i, const BbVector& row)
 	{
 		if (i < 1 || i > nRows + 1)
 		{

@@ -21,10 +21,9 @@ BbVector create_BbVector()
 int main(int argc, char* argv[])
 {
 	// Stopwatch used for the tests
-	BbStopWatch sw(BbStopWatch::TimeUOM::milliseconds);
+    BbStopWatch sw(BbStopWatch::TimeUOM::milliseconds);
 
 /*
-#if __cplusplus >= 201103L
 	{
 		vector<double> vec{ 1., 2., 3., -55. };
 		cout << BbVector(vec).get_sum_abs() << endl;
@@ -41,7 +40,6 @@ int main(int argc, char* argv[])
 		};
 		cout << "BbMatrix A, constructed from initializer_lists: " << endl << A << endl;
 	}
-#endif
 
 	{
 		BbVector a;
@@ -212,7 +210,7 @@ int main(int argc, char* argv[])
 		cout << "Gauss elimination:" << endl;
 
 		sw.start();
-		for (int i = 1; i <= 1000000; ++i)
+        for (int i = 1; i <= 1; ++i)
 			solve_gauss_elimination(R, b);
 
 		cout << "Solved a 3x3 linear system by Gauss Elimination for 1 million times. It took " << sw.split() << " ms" << endl;
@@ -221,27 +219,12 @@ int main(int argc, char* argv[])
 		cout << "Gauss factorization:" << endl;
 
 		sw.restart();
-		for (int i = 1; i <= 1000000; ++i)
+        for (int i = 1; i <= 1; ++i)
 			solve_gauss_factorization(R, b);
 
 		cout << "Solved a 3x3 linear system by Gauss Factorization for 1 million times. It took " << sw.split() << " ms" << endl;
 		cout << solve_gauss_factorization(R, b) << endl;
-
-		cout << "Gauss factorization with overlapping:" << endl;
-
-		sw.restart();
-		for (int i = 1; i <= 1000000; ++i)
-		{
-			BbVector b{ -5., -3., -3. };
-			solve_gauss_factorization(R, &b);
-
-			if (i == 1000000)
-			{
-				cout << "Solved a 3x3 linear system by Gauss Factorization for 1 million times. It took " << sw.split() << " ms" << endl;
-				cout << b << endl;
-			}
-		}
-	}
+    }
 /*
 	{
 		cout << "Push back row: " << endl;
@@ -312,7 +295,6 @@ int main(int argc, char* argv[])
 			AAA.swap_rows(2, 3);
 		}
 		cout << "AAA after row swap: " << endl << AAA << endl << "Took " << sw.split() << " ms" << endl;
-#if __cplusplus >= 201103L
 		AAA.push_back_column({ 666., 666., 666., 666., 666. });
 		cout << "AAA after addition of a column: " << endl << AAA << endl;
 
@@ -323,7 +305,6 @@ int main(int argc, char* argv[])
 			AAA.swap_columns(1, 4);
 		}
 		cout << "AAA after column swap: " << endl << AAA << endl << "Took " << sw.split() << " ms" << endl;
-#endif
 	}
 
 	{
@@ -365,7 +346,6 @@ int main(int argc, char* argv[])
 	}
 *//*
 	{
-#if __cplusplus >= 201103L
 		// Test iterators
 		std::default_random_engine generator;
 		std::uniform_int_distribution<int> distribution(-666, 666);
@@ -382,8 +362,8 @@ int main(int argc, char* argv[])
 		for_each(A.cbegin(1), A.cend(1), [](double a){ cout << a << " "; }); cout << endl;
 		for_each(A.rbegin(1), A.rend(1), [](double a){ cout << a << " "; }); cout << endl;
 		cout << "A[2][2] = " << *(A.cbegin(2) + 1) << endl;
-#endif
-		BbMatrix B(10, 10, 666.);
+
+        BbMatrix B(10, 10, 666.);
 		cout << "B = " << endl << B << endl;
 
 		BbMatrix::RowIterator it = const_cast<BbMatrix::RowIterator>(B.crbegin(5));

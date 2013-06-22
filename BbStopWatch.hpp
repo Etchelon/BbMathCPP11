@@ -23,22 +23,14 @@ private:
 	hr_t_point startTime;
 	hr_t_point splitTime;
 	hr_t_point stopTime;
-	bool isRunning
-#if __cplusplus >= 201103L
-		= false
-#endif
-		;
+    bool isRunning = false;
 	TimeUOM period;
 
 	double get_duration(const hr_t_point& e, const hr_t_point& s, const TimeUOM& p) const;
 
 public:
 	explicit BbStopWatch(TimeUOM p)
-		: period(p)
-#if __cplusplus < 201103L
-		, isRunning(false)
-#endif
-	{ }
+        : period(p) { }
 
 	void start();
 	void stop();

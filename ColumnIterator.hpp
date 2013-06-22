@@ -31,12 +31,10 @@ namespace BbMath
 			: mat(other.mat), row(other.row), column(other.column) { other.mat = nullptr; }
 		~ColumnIterator() { }
 
-#if __cplusplus >= 201103L
 		ColumnIterator& operator=(const ColumnIterator& rhs)
 		{ if (*this != rhs) { mat = rhs.mat; column = rhs.column; row = rhs.row; } return *this; }
 		ColumnIterator& operator=(ColumnIterator&& rhs)
 		{ if (*this != rhs) { mat = rhs.mat; column = rhs.column; row = rhs.row; rhs.mat = nullptr; } return *this; }
-#endif
 
 		// Access operators
 			  double& operator*()					{ return mat[row][column]; }

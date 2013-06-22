@@ -2,8 +2,10 @@
 #define GUARD_BBVECTOR_HPP
 
 #include "ColumnIterator.hpp"
-#include <vector>			// For constructing a BbVector from an existing std::vector<double>
-#include <memory>			// For dynamic memory allocation
+#include <vector>
+#include <string>
+#include <memory>
+#include <stdexcept>
 
 namespace BbMath
 {
@@ -62,8 +64,8 @@ namespace BbMath
 		void unchecked_append(const double& val);
 		void shrink(size_type newSize);
 
-		bool range_check(size_type i, const std::string& msg = "") const;
-		bool is_vector_empty(const std::string& msg = "") const;
+        bool range_check(size_type i, const std::string& msg = "") const;
+        bool is_vector_empty(const std::string& msg = "") const;
 
 	public:
 		// ****************** Constructors
@@ -73,11 +75,9 @@ namespace BbMath
 		BbVector(const_iterator begin, const_iterator end)	   { create(begin, end); }
 		BbVector(const BbVector& other)						   { create(other.cbegin(), other.cend()); }
 		BbVector(BbVector&& other)
-				: myVector(other.myVector), start(other.start), avail(other.avail), limit(other.limit), mySize(std::move(other.mySize))
+            : myVector{other.myVector}, start{other.start}, avail{other.avail}, limit{other.limit}, mySize{other.mySize}
 		{ other.myVector = other.start = other.avail = other.limit = nullptr; }
-#if __cplusplus >= 201103L
 		BbVector(const std::initializer_list<double>& list);
-#endif
 		explicit BbVector(const std::vector<double>& vec);
 		BbVector(const ColumnIterator& begin, const ColumnIterator& end);
 
@@ -127,13 +127,7 @@ namespace BbMath
 	bool BbVector::range_check(size_type i, const std::string& msg) const
 	{
 		if (i < 1 || i > mySize)
-		{
-#if __cplusplus >= 201103L
 			throw std::out_of_range(msg + " - Index i is out of range!!\n");
-#else
-			throw std::out_of_range(msg);
-#endif
-		}
 
 		return true;
 	}
@@ -142,13 +136,7 @@ namespace BbMath
 	bool BbVector::is_vector_empty(const std::string& msg) const
 	{
 		if (mySize == 0)
-		{
-#if __cplusplus >= 201103L
 			throw std::out_of_range(msg + " - Empty BbVector!!\n");
-#else
-			throw std::out_of_range(msg);
-#endif
-		}
 
 		return false;
 	}

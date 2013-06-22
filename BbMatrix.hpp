@@ -3,7 +3,9 @@
 
 #include "ColumnIterator.hpp"
 #include <vector>
+#include <string>
 #include <memory>
+#include <stdexcept>
 
 namespace BbMath
 {
@@ -56,9 +58,7 @@ namespace BbMath
 		BbMatrix(BbMatrix&& other)
 			: myMatrix(other.myMatrix), nRows(other.nRows), nColumns(other.nColumns), hasSize(true)
 		{ other.myMatrix = nullptr; other.hasSize = false;	}
-#if __cplusplus >= 201103L
 		BbMatrix(const std::initializer_list<std::initializer_list<double>>& lists);
-#endif
 		explicit BbMatrix(const std::vector<std::vector<double>>& vec);
 
 		// ****************** Destructor
@@ -136,22 +136,10 @@ namespace BbMath
 	inline bool BbMatrix::range_check(size_type i, size_type j, const std::string& msg) const
 	{		
 		if (i < 1 || i > nRows)
-		{
-#if __cplusplus >= 201103L
 			throw std::out_of_range(msg + " - Index i is out of range!!\n");
-#else
-			throw std::out_of_range(msg);
-#endif
-		}
 
 		if (j < 1 || j > nColumns)
-		{
-#ifdef __MINGW32_
 			throw std::out_of_range(msg + " - Index j is out of range!!\n");
-#else
-			throw std::out_of_range(msg);
-#endif
-		}
 
 		return true;
 	}
@@ -166,7 +154,7 @@ namespace BbMath
 	BbVector solve_Lx(const BbMatrix& L, const BbVector& b);
 	BbVector solve_gauss_elimination(const BbMatrix& A, const BbVector& b);
 	BbVector solve_gauss_factorization(const BbMatrix& A, const BbVector& b);
-	void	 solve_gauss_factorization(const BbMatrix& A, BbVector* bx);
+    void	 solve_gauss_factorization(const BbMatrix& A, BbVector* bx);
 }
 
 #endif
