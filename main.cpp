@@ -21,7 +21,7 @@ BbVector create_BbVector()
 int main(int argc, char* argv[])
 {
 	// Stopwatch used for the tests
-    BbStopWatch sw(BbStopWatch::TimeUOM::milliseconds);
+	BbStopWatch sw(BbStopWatch::TimeUOM::milliseconds);
 
 /*
 	{
@@ -210,7 +210,7 @@ int main(int argc, char* argv[])
 		cout << "Gauss elimination:" << endl;
 
 		sw.start();
-        for (int i = 1; i <= 1; ++i)
+		for (int i = 1; i <= 1; ++i)
 			solve_gauss_elimination(R, b);
 
 		cout << "Solved a 3x3 linear system by Gauss Elimination for 1 million times. It took " << sw.split() << " ms" << endl;
@@ -219,7 +219,7 @@ int main(int argc, char* argv[])
 		cout << "Gauss factorization:" << endl;
 
 		sw.restart();
-        for (int i = 1; i <= 1; ++i)
+		for (int i = 1; i <= 1; ++i)
 			solve_gauss_factorization(R, b);
 
 		cout << "Solved a 3x3 linear system by Gauss Factorization for 1 million times. It took " << sw.split() << " ms" << endl;
@@ -363,7 +363,7 @@ int main(int argc, char* argv[])
 		for_each(A.rbegin(1), A.rend(1), [](double a){ cout << a << " "; }); cout << endl;
 		cout << "A[2][2] = " << *(A.cbegin(2) + 1) << endl;
 
-        BbMatrix B(10, 10, 666.);
+		BbMatrix B(10, 10, 666.);
 		cout << "B = " << endl << B << endl;
 
 		BbMatrix::RowIterator it = const_cast<BbMatrix::RowIterator>(B.crbegin(5));

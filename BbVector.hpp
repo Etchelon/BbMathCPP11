@@ -54,8 +54,23 @@ namespace BbMath
 		void create();
 		void create(size_type n, const double& val);
 
+		// Private function for memory management: create a BbVector by copying another BbVector using iterators (similar to one of std::vector constructors)
 		template<class Iter>
-		void create(Iter b, Iter e);
+		void create(Iter b, Iter e)
+		{
+			if (b == e)
+			{
+				create();
+				return;
+			}
+
+			mySize = e - b;
+			myVector = alloc.allocate(mySize + 1);
+			start = myVector + 1;
+			limit = avail = start + mySize;
+
+			std::uninitialized_copy(b, e, start);
+		}
 
 		void uncreate();
 
