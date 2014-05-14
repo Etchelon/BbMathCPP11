@@ -156,9 +156,108 @@ int main(int argc, char* argv[])
 			cout << product_xTy(bb, bb) << endl;
 			cout << transpose(product_AB(AA, AA)) << endl;
 
+<<<<<<< HEAD
 			AA.resize(2, 2);
 			cout << AA << endl;
 			cout << transpose(AA) << endl;
+=======
+	{
+		sw.restart();
+		BbMatrix uff(10000, 10000, 4.);
+		cout << "I have initialized a 10000x10000 BbMatrix in " << sw.split() << " ms!" << endl;
+
+		transpose(uff);
+		cout << "I have transposed a 10000x10000 BbMatrix in " << sw.split() << " ms!" << endl;
+	}
+*/
+	{
+		BbMatrix R(3, 3);
+		BbVector b(3);
+		R(1,1) = 1.;
+		R(1,2) = 2.;
+		R(1,3) = 3.;
+		R(2,1) = -1.;
+		R(2,2) = 0.;
+		R(2,3) = 1.;
+		R(3,1) = 3.;
+		R(3,2) = 1.;
+		R(3,3) = 3.;
+		b(1) = -5.;
+		b(2) = -3.;
+		b(3) = -3.;
+
+//		BbMatrix R
+//		{
+//			{ 10., 1.E+20 },
+//			{ 1., -.9 }
+//		};
+//		BbVector b{ 1.E+20, .1 };
+
+//		BbMatrix R
+//		{
+//			{ 10., 1., 0. },
+//			{ .5, 1.E-20, 1. },
+//			{ 0., 0., 1. }
+//		};
+//		BbVector b{ 1.E+20, 1., 1. };
+
+//		BbMatrix R
+//		{
+//			{ -1., 1., -1. },
+//			{ 10., -5., 10. },
+//			{ 2., 1., 1. }
+//		};
+//		BbVector b{ 1., -3., 2. };
+
+		cout << "Gauss elimination:" << endl;
+
+		sw.start();
+		for (int i = 1; i <= 1; ++i)
+			solve_gauss_elimination(R, b);
+
+		cout << "Solved a 3x3 linear system by Gauss Elimination for 1 million times. It took " << sw.split() << " ms" << endl;
+		cout << solve_gauss_elimination(R, b) << endl;
+
+		cout << "Gauss factorization:" << endl;
+
+		sw.restart();
+		for (int i = 1; i <= 1; ++i)
+			solve_gauss_factorization(R, b);
+
+		cout << "Solved a 3x3 linear system by Gauss Factorization for 1 million times. It took " << sw.split() << " ms" << endl;
+		cout << solve_gauss_factorization(R, b) << endl;
+    }
+/*
+	{
+		cout << "Push back row: " << endl;
+
+		BbMatrix R(3, 3);
+		R(1,1) = 1.;
+		R(1,2) = 2.;
+		R(1,3) = 3.;
+		R(2,1) = -1.;
+		R(2,2) = 0.;
+		R(2,3) = 1.;
+		R(3,1) = 3.;
+		R(3,2) = 1.;
+		R(3,3) = 3.;
+
+		sw.restart();
+		for (int i = 1; i <= 5000000; ++i)
+		{
+			R.push_back_row(R.get_row(1));
+			R.chop_row();
+		}
+		cout << "Took " << sw.split() << " ms" << endl;
+
+		cout << "Push back column: " << endl;
+
+		sw.restart();
+		for (int i = 1; i <= 5000000; ++i)
+		{
+			R.push_back_column(R.get_row(1));
+			R.chop_column();
+>>>>>>> d43d2ec510ba2bfb006e67fea25ff26f579f56ce
 		}
 
 		{
@@ -297,6 +396,26 @@ int main(int argc, char* argv[])
 			}
 			cout << "AAA after column swap: " << endl << AAA << endl << "Took " << sw.split() << " ms" << endl;
 		}
+<<<<<<< HEAD
+=======
+		cout << endl;
+
+		for_each(A.cbegin(1), A.cend(1), [](double a){ cout << a << " "; }); cout << endl;
+		for_each(A.rbegin(1), A.rend(1), [](double a){ cout << a << " "; }); cout << endl;
+		cout << "A[2][2] = " << *(A.cbegin(2) + 1) << endl;
+
+		BbMatrix B(10, 10, 666.);
+		cout << "B = " << endl << B << endl;
+
+		BbMatrix::RowIterator it = const_cast<BbMatrix::RowIterator>(B.crbegin(5));
+		cout << "B[1][5] = " << *it << endl;
+		*it = 15.;
+		cout << "B[1][5] = " << *it << endl;
+
+		BbMatrix::RowIterator it2 = it + 4;
+		*it2 = 55.;
+		cout << "B[5][5] = " << *it2 << endl;
+>>>>>>> d43d2ec510ba2bfb006e67fea25ff26f579f56ce
 
 		{
 			BbMatrixD A(10, 10, 666.);
