@@ -1,0 +1,16 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+BreakBeforeBraces: Linux
+BreakBeforeTernaryOperators: true
+AllowShortIfStatementsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 0
+AccessModifierOffset: -4
+DerivePointerAlignment: false
+PointerAlignment: Left
+AlignTrailingComments: true
+AllowShortFunctionsOnASingleLine: Empty
