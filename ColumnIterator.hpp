@@ -28,7 +28,10 @@ public:
 	ColumnIterator(const ColumnIterator& other)
 		: mat(other.mat), row(other.row), column(other.column) {}
 	ColumnIterator(ColumnIterator&& other)
-		: mat(other.mat), row(other.row), column(other.column) { other.mat = nullptr; }
+		: mat(other.mat), row(other.row), column(other.column)
+	{
+		other.mat = nullptr;
+	}
 	~ColumnIterator() {}
 
 	ColumnIterator& operator=(const ColumnIterator& rhs)
@@ -52,9 +55,15 @@ public:
 	}
 
 	// Access operators
-	T& operator*() { return mat[row][column]; }
+	T& operator*()
+	{
+		return mat[row][column];
+	}
 	//		const T& operator*() const			   { return mat[row][column]; }
-	T& operator[](size_type i) { return mat[i][column]; }
+	T& operator[](size_type i)
+	{
+		return mat[i][column];
+	}
 	//		const T& operator[](size_type i) const { return mat[i][column]; }
 
 	// Increment/decrement operators
@@ -68,15 +77,30 @@ public:
 		--row;
 		return *this;
 	}
-	ColumnIterator operator+(const size_type& n) const { return ColumnIterator(mat, row + n, column); }
-	ColumnIterator operator-(const size_type& n) const { return ColumnIterator(mat, row - n, column); }
-	size_type operator-(const ColumnIterator& rhs) const { return row - rhs.row; }
+	ColumnIterator operator+(const size_type& n) const
+	{
+		return ColumnIterator(mat, row + n, column);
+	}
+	ColumnIterator operator-(const size_type& n) const
+	{
+		return ColumnIterator(mat, row - n, column);
+	}
+	size_type operator-(const ColumnIterator& rhs) const
+	{
+		return row - rhs.row;
+	}
 	template <typename C>
 	friend ColumnIterator<C> operator+(size_type n, const ColumnIterator<C>& rhs);
 
 	// Comparison operators
-	bool operator==(const ColumnIterator& rhs) const { return mat == rhs.mat && column == rhs.column && row == rhs.row; }
-	bool operator!=(const ColumnIterator& rhs) const { return !(*this == rhs); }
+	bool operator==(const ColumnIterator& rhs) const
+	{
+		return mat == rhs.mat && column == rhs.column && row == rhs.row;
+	}
+	bool operator!=(const ColumnIterator& rhs) const
+	{
+		return !(*this == rhs);
+	}
 	bool operator<(const ColumnIterator& rhs) const;
 	bool operator<=(const ColumnIterator& rhs) const;
 	bool operator>(const ColumnIterator& rhs) const;
